@@ -129,13 +129,17 @@ class TextLine {
   /// The corner points of the text line in clockwise order starting with the top left point relative to the image in the default coordinate space.
   final List<Point<int>> cornerPoints;
 
+  /// The angle of the rotation of the recognized line.
+  final double angle;
+
   /// Constructor to create an instance of [TextLine].
   TextLine(
       {required this.text,
       required this.elements,
       required this.boundingBox,
       required this.recognizedLanguages,
-      required this.cornerPoints});
+      required this.cornerPoints,
+      required this.angle,});
 
   /// Returns an instance of [TextLine] from a given [json].
   factory TextLine.fromJson(Map<dynamic, dynamic> json) {
@@ -144,6 +148,7 @@ class TextLine {
     final recognizedLanguages =
         _listToRecognizedLanguages(json['recognizedLanguages']);
     final points = _listToCornerPoints(json['points']);
+    final angle = json['angle'] ?? 0.0;
     final elements = <TextElement>[];
     for (final element in json['elements']) {
       final textElement = TextElement.fromJson(element);
@@ -154,7 +159,8 @@ class TextLine {
         elements: elements,
         boundingBox: rect,
         recognizedLanguages: recognizedLanguages,
-        cornerPoints: points);
+        cornerPoints: points,
+        angle: angle,);
   }
 }
 
@@ -169,18 +175,23 @@ class TextElement {
   /// List of corner points of the text element in clockwise order starting with the top left point relative to the image in the default coordinate space.
   final List<Point<int>> cornerPoints;
 
+  /// The angle of the rotation of the recognized line.
+  final double angle;
+
   /// Constructor to create an instance of [TextElement].
   TextElement(
       {required this.text,
       required this.boundingBox,
-      required this.cornerPoints});
+      required this.cornerPoints,
+      required this.angle,});
 
   /// Returns an instance of [TextElement] from a given [json].
   factory TextElement.fromJson(Map<dynamic, dynamic> json) {
     final text = json['text'];
     final rect = RectJson.fromJson(json['rect']);
     final points = _listToCornerPoints(json['points']);
-    return TextElement(text: text, boundingBox: rect, cornerPoints: points);
+    final angle = json['angle'] ?? 0.0;
+    return TextElement(text: text, boundingBox: rect, cornerPoints: points, angle: angle,);
   }
 }
 
